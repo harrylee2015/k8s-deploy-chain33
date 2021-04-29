@@ -11,8 +11,8 @@ build:
 	@go build -o deploy
 
 docker:
-	if [ -n $(docker images ${BUSYBOX_IMAGE}|grep -v 'TAG')];then docker rmi ${BUSYBOX_IMAGE}; fi
-	if [ -n $(docker images ${CHAIN33_IMAGE}|grep -v 'TAG')];then docker rmi ${CHAIN33_IMAGE}; fi
+	if [ -z $(docker images ${BUSYBOX_IMAGE}|grep -v 'TAG')];then docker rmi ${BUSYBOX_IMAGE}; fi
+	if [ -z $(docker images ${CHAIN33_IMAGE}|grep -v 'TAG')];then docker rmi ${CHAIN33_IMAGE}; fi
 	@docker rmi  ${BUSYBOX_IMAGE} ${CHAIN33_IMAGE}
 	@docker build -t ${BUSYBOX_IMAGE} -f busybox/Dockerfile ./busybox
 	@docker build -t ${CHAIN33_IMAGE} -f chain33/Dockerfile ./chain33
