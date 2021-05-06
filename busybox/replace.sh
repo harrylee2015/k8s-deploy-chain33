@@ -4,7 +4,6 @@
 # 环境变量导入
 sleep 10
 source ./env
-source ./hosts
 local_hostname=$(hostname)
 local_domain=$(hostname -f)
 hostnames=`cat hosts`
@@ -19,12 +18,11 @@ done
 source ./ips
 #替换实际变量
 eval "cat <<EOF
-$(<base.toml)
+$(cat base.toml)
 EOF
-" >tmp.toml
+" >chain33.toml
 if [ "$?" -ne 0 ]; then
   echo "replace chain33.toml failed!"
   exit 1
 fi
-mv tmp.toml chain33.toml
 echo "replace chain33.toml sucessfully!"
