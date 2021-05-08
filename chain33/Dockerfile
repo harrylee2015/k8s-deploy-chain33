@@ -5,4 +5,6 @@ RUN apt-get update \
 WORKDIR /app/chain33/
 COPY resource/chain33  /app/chain33/
 COPY resource/chain33-cli   /app/chain33/
+COPY resource/start.sh   /app/chain33/
+RUN chmod +x /app/chain33/replace.sh
 CMD ["/app/chain33/chain33","-f","/app/chain33/chain33.toml"]
