@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: chain33-busybox1
+  namespace: default
+  labels:
+    app: chain33
+spec:
+  # These containers are run during pod initialization
+  # These containers are run during pod initialization
+  hostname: chain33-busybox1
+  subdomain: chain33-subdomain  
+  containers:
+  - image: chain33busybox:v1.0.1
+    command:
+      - sleep
+      - "3600"
+    name: test-busybox1
+  dnsPolicy: ClusterFirst

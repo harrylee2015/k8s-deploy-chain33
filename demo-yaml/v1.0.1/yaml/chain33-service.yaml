@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chain33-subdomain
+  namespace: default
+spec:
+  selector:
+    app: chain33
+  clusterIP: None
+  ports:
+  - name: jrpc # 实际上不需要指定端口号
+    port: 8801
+    targetPort: 8801
+
+

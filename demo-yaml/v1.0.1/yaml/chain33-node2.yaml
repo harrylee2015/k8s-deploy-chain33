@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node2
+  namespace: default
+  labels:
+    app: chain33
+spec:
+  hostname: node2
+  subdomain: chain33-subdomain
+  dnsPolicy: ClusterFirst
+  containers:
+  - name: node2
+    image: chain33:v1.0.1
+    command: ['/bin/bash', 'start.sh']
+#    ports:
+#      - containerPort: 8801
+#      - containerPort: 8802
+#      - containerPort: 46656
+#      - containerPort: 13802
+    volumeMounts:
+    - mountPath: /app/chain33/datadir/
+      name: datadir
+    - mountPath: /app/chain33/genesis.json
+      name: genesis
+    - mountPath: /app/chain33/priv_validator.json
+      name: priv
+    - mountPath: /app/chain33/chain33.toml
+      name: chain33-toml
+    - mountPath: /app/chain33/base.toml
+      name: base-toml
+    - mountPath: /app/chain33/env
+      name: env 
+    - mountPath: /app/chain33/hosts
+      name: hosts
+  volumes:
+  - name: datadir
+    hostPath:
+      path: /chain33/chain33-node2/datadir/
+      type: DirectoryOrCreate
+  - name: genesis
+    hostPath:
+      path: /chain33/chain33-node2/genesis.json
+      type: File
+  - name: priv
+    hostPath:
+      path: /chain33/chain33-node2/priv_validator.json
+      type: File
+  - name: chain33-toml
+    hostPath:
+      path: /chain33/chain33-node2/chain33.toml
+      type: FileOrCreate
+  - name: base-toml
+    hostPath:
+      path: /chain33/chain33-node2/base.toml 
+      type: File
+  - name: env
+    hostPath:
+      path: /chain33/chain33-node2/env 
+      type: File
+  - name: hosts
+    hostPath:
+      path: /chain33/chain33-node2/hosts 
+      type: File
