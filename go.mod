@@ -1,4 +1,4 @@
-module github.com/harrylee2015/k8s-depoy-chain33
+module github.com/harrylee2015/k8s-deploy-chain33
 
 go 1.14
 
