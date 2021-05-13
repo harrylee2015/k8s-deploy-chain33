@@ -1,19 +1,24 @@
 #!/bin/bash
 # author： harry
 # describe: 为支持在k8s中部署chain33而写的在pod中动态修改配置文件脚本
-# 环境变量导入  env其他参数配置信息,hosts主机名称列表
+# 环境变量导入  env其他参数配置信息,$REPLICAS副本数，对链而言则是节点数 $POD_NAME_PREFIX pod名称前缀
 sleep 10
-source ./env
+source ./config/env
 local_hostname=$(hostname)
 local_domain=$(hostname -f)
-hostnames=`cat hosts`
 rm -rf ips
-for i in $hostnames
+for i in `seq 0 $REPLICAS`
 do
-  domain=$(echo ${local_domain}|sed -e "s/${local_hostname}./${i}./g")
-  for j in `seq 1 100`
+  if [[ $i -eq $REPLICAS ]]; then
+    break
+  fi
+  cp  config/priv_validator_$i.json priv_validator.json
+  cp  config/genesis.json  genesis.json
+  cp  config/base.toml  base.toml
+  domain=$(echo ${local_domain}|sed -e "s/${local_hostname}./${POD_NAME_PREFIX}-${i}./g")
+  for j in `seq 1 150`
   do
-    echo "try ping times: $j"
+    echo "=========try ping times=======: $j"
     IP=$(ping $domain -c 1 |awk 'NR==2 {print $5}' |awk -F ':' '{print $1}' |sed -nr "s#\(##gp"|sed -nr "s#\)##gp")
     if [[ -n "$IP" ]]; then
       echo "$i=$IP" >> ips
