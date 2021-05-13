@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: chain33
+spec:
+  serviceName: "chain33-subdomain"
+  selector:
+    matchLabels:
+      app: chain33 # has to match .spec.template.metadata.labels
+  podManagementPolicy: "Parallel" # 并行pod管理策略
+  replicas: 4 # by default is 4
+  template:
+    metadata:
+      labels:
+        app: chain33 # has to match .spec.selector.matchLabels
+      namespace: default
+    spec:
+      dnsPolicy: ClusterFirst
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: chain33
+        image: chain33:v1.0.2
+        command: ['/bin/bash', 'start.sh'] #启动命令
+        ports:
+          - containerPort: 8801
+          - containerPort: 8802
+          - containerPort: 46656
+          - containerPort: 13802
+        imagePullPolicy: IfNotPresent  #如果不存在则拉取
+        env:
+          - name: REPLICAS  #副本数（节点数量)
+            value: "4"
+          - name: POD_NAME_PREFIX #pod名称前缀，statefulset拉取的pod名称是按xxx-0规则顺序命名
+            value: "chain33"      
+        volumeMounts:
+        - mountPath: /app/chain33/datadir/  #挂载数据卷
+          name: chain33-pvc
+        - mountPath: /app/chain33/config  #挂载配置文件
+          name: config
+      volumes:
+      - name: config      
+        configMap:
+          name: chain33-config
+          items:
+          - key: base.toml
+            path: base.toml
+          - key: env
+            path: env
+          - key: genesis.json
+            path: genesis.json
+          - key: priv_validator_0.json
+            path: priv_validator_0.json 
+          - key: priv_validator_1.json
+            path: priv_validator_1.json 
+          - key: priv_validator_2.json
+            path: priv_validator_2.json
+          - key: priv_validator_3.json
+            path: priv_validator_3.json 
+  volumeClaimTemplates:
+  - metadata:
+      name: chain33-pvc
+      labels:
+        app: chain33
+    spec:
+      accessModes: [ "ReadWriteOnce" ] #只能一个节点读写
+      storageClassName: "fast"  #存储类型 fast
+      resources:
+        requests:
+          storage: 1Gi        
