@@ -21,7 +21,7 @@ do
     echo "=========try ping times=======: $j"
     IP=$(ping $domain -c 1 |awk 'NR==2 {print $5}' |awk -F ':' '{print $1}' |sed -nr "s#\(##gp"|sed -nr "s#\)##gp")
     if [[ -n "$IP" ]]; then
-      echo "$i=$IP" >> ips
+      echo "${POD_NAME_PREFIX}-${i}=$IP" >> ips
       break
     fi
     sleep 1
