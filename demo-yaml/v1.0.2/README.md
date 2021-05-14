@@ -42,7 +42,7 @@
 
    kubectl exec -it chain33-0 -- ./chain33-cli net is_sync
 ```
-##  [用测试工具](https://bty33.oss-cn-shanghai.aliyuncs.com/chain33Dev/sendtx-count)
+##  用测试工具向其中一个节点发送交易，并观察区块高度是否增长
 ```
   wget https://bty33.oss-cn-shanghai.aliyuncs.com/chain33Dev/sendtx-count
   
