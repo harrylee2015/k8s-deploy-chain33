@@ -6,15 +6,16 @@ sleep 10
 source ./config/env
 local_hostname=$(hostname)
 local_domain=$(hostname -f)
+# copy配置文件
+cp  config/priv_validator_${local_hostname##*-}.json priv_validator.json
+cp  config/genesis.json  genesis.json
+cp  config/base.toml  base.toml
 rm -rf ips
 for i in `seq 0 $REPLICAS`
 do
   if [[ $i -eq $REPLICAS ]]; then
     break
   fi
-  cp  config/priv_validator_$i.json priv_validator.json
-  cp  config/genesis.json  genesis.json
-  cp  config/base.toml  base.toml
   domain=$(echo ${local_domain}|sed -e "s/${local_hostname}./${POD_NAME_PREFIX}-${i}./g")
   for j in `seq 1 150`
   do
