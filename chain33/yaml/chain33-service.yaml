@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${CLUSTER_NAME}-subdomain
+  labels:
+    app: ${CLUSTER_NAME}
+  namespace: default
+spec:
+  selector:
+    app: ${CLUSTER_NAME}
+  clusterIP: None
+  ports:
+  - name: jrpc # 实际上不需要指定端口号
+    protocol: TCP
+    port: 8801
+    targetPort: 8801
+  - name: grpc # 实际上不需要指定端口号
+    protocol: TCP
+    port: 8802
+    targetPort: 8802
+
+

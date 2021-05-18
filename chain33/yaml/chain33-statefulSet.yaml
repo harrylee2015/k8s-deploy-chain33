@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ${CLUSTER_NAME}
+spec:
+  serviceName: "${CLUSTER_NAME}-subdomain"
+  selector:
+    matchLabels:
+      app: ${CLUSTER_NAME} # has to match .spec.template.metadata.labels
+  podManagementPolicy: "Parallel" # 并行pod管理策略
+  replicas: ${REPLICAS} # by default is 4
+  template:
+    metadata:
+      labels:
+        app: ${CLUSTER_NAME} # has to match .spec.selector.matchLabels
+      namespace: default
+    spec:
+      dnsPolicy: ClusterFirst
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: ${CLUSTER_NAME}
+        image: chain33:v1.0.2
+        command: ['/bin/bash', 'start.sh'] #启动命令
+        imagePullPolicy: IfNotPresent  #如果不存在则拉取
+        env:
+          - name: REPLICAS  #副本数（节点数量)
+            value: "${REPLICAS}"
+          - name: POD_NAME_PREFIX #pod名称前缀，statefulset拉取的pod名称是按xxx-0规则顺序命名
+            value: "${CLUSTER_NAME}"
+        volumeMounts:
+        - mountPath: /app/chain33/datadir/  #挂载数据卷
+          name: chain33-pvc
+        - mountPath: /app/chain33/config  #挂载配置文件
+          name: config
+      volumes:
+        - name: config
+          configMap:
+            name: ${CLUSTER_NAME}-config
+            items:
+${ITEMS}
+  volumeClaimTemplates:
+  - metadata:
+      name: ${CLUSTER_NAME}-pvc
+      labels:
+        app: ${CLUSTER_NAME}
+    spec:
+      accessModes: [ "ReadWriteOnce" ] #只能一个节点读写
+      storageClassName: "fast"  #存储类型 fast
+      resources:
+        requests:
+          storage: 1Gi        #后面再调整配额
