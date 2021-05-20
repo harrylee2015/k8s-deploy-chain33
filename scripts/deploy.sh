@@ -10,15 +10,20 @@ REPLICAS=$2
 DEPLOY_DIR=$3
 
 #CONFIG_ITEMS
-ITEMS=""
+ITEMS="            - key: base.toml
+                path: base.toml
+              - key: env
+                path: env
+              - key: genesis.json
+                path: genesis.json"
 for i in `seq 0 $REPLICAS`
 do
   if [[ $i -eq $REPLICAS ]]; then
     break
   fi
   ITEMS=$ITEMS"
-            - key: priv_validator_$i.json
-              path: priv_validator_$i.json"
+              - key: priv_validator_$i.json
+                path: priv_validator_$i.json"
 done
 
 #SEEDS, VALIDATORNODES
