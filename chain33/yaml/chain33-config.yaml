@@ -6,7 +6,7 @@ metadata:
 data:
   # 类文件键
   base.toml: |
-    Title="${TITLE}"
+    Title="local"
     FixTime=false
     version="1.64.0-68f55015"
     
