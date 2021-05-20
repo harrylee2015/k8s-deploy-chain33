@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 1
       containers:
       - name: ${CLUSTER_NAME}
-        image: chain33:v1.0.2
+        image: ${IMAGE}
         command: ['/bin/bash', 'start.sh'] #启动命令
         imagePullPolicy: IfNotPresent  #如果不存在则拉取
         env:
@@ -29,7 +29,7 @@ spec:
             value: "${CLUSTER_NAME}"
         volumeMounts:
         - mountPath: /app/chain33/datadir/  #挂载数据卷
-          name: chain33-pvc
+          name: ${CLUSTER_NAME}-pvc
         - mountPath: /app/chain33/config  #挂载配置文件
           name: config
       volumes:
@@ -37,7 +37,7 @@ spec:
           configMap:
             name: ${CLUSTER_NAME}-config
             items:
-${ITEMS}
+  ${ITEMS}
   volumeClaimTemplates:
   - metadata:
       name: ${CLUSTER_NAME}-pvc

@@ -17,9 +17,8 @@ do
     break
   fi
   ITEMS=$ITEMS"
-          - key: priv_validator_$i.json
-            path: priv_validator_$i.json
-  "
+            - key: priv_validator_$i.json
+              path: priv_validator_$i.json"
 done
 
 #SEEDS, VALIDATORNODES
@@ -44,7 +43,7 @@ echo -e "${GRE} $SEEDS ${NOC}"
 echo -e "${GRE} $VALIDATORNODES ${NOC}"
 mkdir -p ${DEPLOY_DIR}/${CLUSTER_NAME}
 #从镜像中copy chain33-cli可执行文件，生成私钥
-IMAGE=chain33:1.0.2
+IMAGE=lihailei/chain33:1.0.2
 if [  ! -z `docker images -q ${IMAGE}` ]; then
   docker pull ${IMAGE}
 fi
@@ -117,9 +116,9 @@ fi
 ##开始部署
 cd ${CLUSTER_NAME}
 ./kubectl apply -f chain33-storageClass.yaml
-sleep 1
+sleep 2
 ./kubectl apply -f chain33-config.yaml
-sleep 1
+sleep 2
 ./kubectl apply -f chain33-service.yaml
-sleep 1
+sleep 2
 ./kubectl apply -f chain33-statefulSet.yaml

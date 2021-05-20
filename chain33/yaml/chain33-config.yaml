@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: chain33-config
+  name: ${CLUSTER_NAME}-config
   namespace: default
 data:
   # 类文件键
