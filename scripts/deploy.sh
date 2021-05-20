@@ -43,11 +43,11 @@ echo -e "${GRE} $SEEDS ${NOC}"
 echo -e "${GRE} $VALIDATORNODES ${NOC}"
 mkdir -p ${DEPLOY_DIR}/${CLUSTER_NAME}
 #从镜像中copy chain33-cli可执行文件，生成私钥
-IMAGE=lihailei/chain33:1.0.2
+IMAGE=lihailei/chain33:v1.0.2
 if [  ! -z `docker images -q ${IMAGE}` ]; then
   docker pull ${IMAGE}
 fi
-docker run -d --rm --name chain33 chain33:v1.0.2 /bin/bash -c "sleep 30"
+docker run -d --rm --name chain33 ${IMAGE} /bin/bash -c "sleep 30"
 docker cp  chain33:/app/chain33/chain33-config.yaml ${DEPLOY_DIR}
 docker cp  chain33:/app/chain33/chain33-service.yaml ${DEPLOY_DIR}
 docker cp  chain33:/app/chain33/chain33-statefulSet.yaml ${DEPLOY_DIR}
@@ -113,12 +113,12 @@ if [ "$?" -ne 0 ]; then
   exit 1
 fi
 
-##开始部署
+##开始部署,前提是环境kubectl已经导入到环境变量中了
 cd ${CLUSTER_NAME}
-./kubectl apply -f chain33-storageClass.yaml
+kubectl apply -f chain33-storageClass.yaml
 sleep 2
-./kubectl apply -f chain33-config.yaml
+kubectl apply -f chain33-config.yaml
 sleep 2
-./kubectl apply -f chain33-service.yaml
+kubectl apply -f chain33-service.yaml
 sleep 2
-./kubectl apply -f chain33-statefulSet.yaml
+kubectl apply -f chain33-statefulSet.yaml
