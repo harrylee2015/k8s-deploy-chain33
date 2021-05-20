@@ -331,4 +331,4 @@ data:
 ${GENESIS}
 ${PRIV_VADATOR}
   env: |
-    Title=midea  
+    TITLE=midea
