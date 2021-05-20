@@ -64,7 +64,7 @@ data:
     
     [p2p.sub.gossip]
     port=13802
-    seeds=["${chain33_0}:13802","${chain33_1}:13802","${chain33_2}:13802","${chain33_3}:13802"]
+    seeds=[${SEEDS}]
     isSeed=false
     innerSeedEnable=false
     useGithub=false
@@ -115,7 +115,7 @@ data:
     skipTimeoutCommit=false
     createEmptyBlocks=false
     createEmptyBlocksInterval=0
-    validatorNodes=["${chain33_0}:46656","${chain33_1}:46656","${chain33_2}:46656","${chain33_3}:46656"]
+    validatorNodes=[${VALIDATORNODES}]
     fastSync=false
     # Propose阶段是否预执行区块
     preExec=false
