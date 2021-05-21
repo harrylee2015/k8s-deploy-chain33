@@ -26,5 +26,11 @@ kubectl version
  cd scripts
  
  bash deploy.sh  <集群名称>  <副本数>  <部署目录>
+ 
+ eg:
+ 
+ bash deploy.sh  chain33    4   baas
+ 
+ # 表示部署一个chain33的联盟链集群服务，总共有四个节点，安装在于当前脚本同级的baas文件夹下
 ```
 
