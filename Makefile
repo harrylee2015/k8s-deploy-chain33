@@ -1,5 +1,5 @@
 BASE := chain33
-TAG := 1.0.1
+TAG := v1.0.2
 BUSYBOX_IMAGE := ${BASE}busybox:${TAG}
 CHAIN33_IMAGE := ${BASE}:${TAG}
 
@@ -11,9 +11,8 @@ build:
 	@go build -o deploy
 
 docker:
-	@if [[ -z $(docker images $${BUSYBOX_IMAGE}|grep -v 'TAG') ]];then docker rmi ${BUSYBOX_IMAGE}; fi
-	@if [[ -z $(docker images $${CHAIN33_IMAGE}|grep -v 'TAG') ]];then docker rmi ${CHAIN33_IMAGE}; fi
-	@docker rmi  ${BUSYBOX_IMAGE} ${CHAIN33_IMAGE}
+	@if [ -n "`docker images -q ${BUSYBOX_IMAGE}`" ];then docker rmi ${BUSYBOX_IMAGE}; fi
+	@if [ -n "`docker images -q ${CHAIN33_IMAGE}`" ];then docker rmi ${CHAIN33_IMAGE}; fi
 	@docker build -t ${BUSYBOX_IMAGE} -f busybox/Dockerfile ./busybox
 	@docker build -t ${CHAIN33_IMAGE} -f chain33/Dockerfile ./chain33
 
